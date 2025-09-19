@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '--platform', 'linux/amd64', '-t', 'us-central1-docker.pkg.dev/gcp-home-dtian01/chatapp-docker-repo/chat-app:latest', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/gcp-home-dtian01/chatapp-docker-repo/chat-app:latest']

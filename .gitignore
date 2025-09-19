@@ -1,0 +1,35 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+.*
+!.gitignore
+*.iml
+target
+gradle
+src/test/resources/test_ykeykey.vault
+
+# Local .terraform directories
+.terraform/*
+
+.terraformrc
+terraform.rc
+
+*/__pycache__/*
+db/*
+*/gradio_cached_examples/*
+venv
+
+# Local .terraform directories
+**/.terraform/
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+.terraformrc
+terraform.rc
+
+**/.terraform.lock.hcl
+*.tfvars

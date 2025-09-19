@@ -1,0 +1,73 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: llmautoscalers.llm.dev
+spec:
+  group: llm.dev
+  names:
+    kind: LLMAutoscaler
+    plural: llmautoscalers
+    singular: llmautoscaler
+  scope: Namespaced
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                deploymentName:
+                  type: string
+                namespace:
+                  type: string
+                scaleTargetURL:
+                  type: string
+                metric:
+                  type: string
+                threshold:
+                  type: number
+                minReplicas:
+                  type: integer
+                maxReplicas:
+                  type: integer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-autoscaler-operator
+  labels:
+    app: llm-autoscaler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-autoscaler
+  template:
+    metadata:
+      labels:
+        app: llm-autoscaler
+    spec:
+      serviceAccountName: default
+      containers:
+        - name: operator
+          image: your-dockerhub-user/llm-autoscaler:latest
+          imagePullPolicy: Always
+---
+apiVersion: llm.dev/v1
+kind: LLMAutoscaler
+metadata:
+  name: vllm-autoscaler
+  namespace: default
+spec:
+  deploymentName: vllm-inference
+  namespace: default
+  scaleTargetURL: http://vllm-inference.default.svc.cluster.local:8000/metrics
+  metric: vllm_api_pending_requests
+  threshold: 5
+  minReplicas: 1
+  maxReplicas: 4
